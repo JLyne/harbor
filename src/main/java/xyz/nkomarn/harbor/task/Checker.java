@@ -4,7 +4,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
-import org.bukkit.entity.Pose;
 import org.bukkit.metadata.MetadataValue;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
@@ -169,7 +168,7 @@ public class Checker extends BukkitRunnable {
         List<Player> excluded = getExcluded(world);
 
         return world.getPlayers().stream()
-                .filter(player -> player.getPose() == Pose.SLEEPING)
+                .filter(e -> !excluded.contains(e) && e.isSleeping())
                 .collect(toList());
     }
 
