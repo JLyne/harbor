@@ -47,23 +47,6 @@ public class Messages implements Listener {
     }
 
     /**
-     * Sends an actionbar message to all players in a given world.
-     *
-     * @param world   The world context.
-     * @param message The message to send.
-     */
-    public void sendActionBarMessage(@NotNull World world, @NotNull String message) {
-        if (!config.getBoolean("messages.actionbar.enabled") || message.length() < 1) {
-            return;
-        }
-
-        BaseComponent[] preparedMessage = TextComponent.fromLegacyText(prepareMessage(world, message));
-        for (Player player : world.getPlayers()) {
-            player.spigot().sendMessage(ChatMessageType.ACTION_BAR, preparedMessage);
-        }
-    }
-
-    /**
      * Sets the message for the given world's bossbar.
      *
      * @param world      The world in which the bossbar exists.

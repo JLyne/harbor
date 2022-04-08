@@ -41,10 +41,6 @@ blacklisted-worlds:
 whitelist-mode: false # Will treat the above list as a whitelist instead of a blacklist
 
 messages:
-  actionbar:
-    enabled: true
-    players-sleeping: "&e[sleeping] out of [needed] players are sleeping ([more] more needed to skip)"
-    night-skipping: "&eEveryone is sleeping- sweet dreams!"
   bossbar:
     enabled: true
     players-sleeping:

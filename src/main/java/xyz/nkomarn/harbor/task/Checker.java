@@ -86,11 +86,9 @@ public class Checker extends BukkitRunnable {
         if (needed > 0) {
             double sleepingPercentage = Math.min(1, (double) sleeping / getSkipAmount(world));
 
-            messages.sendActionBarMessage(world, config.getString("messages.actionbar.players-sleeping"));
             messages.sendBossBarMessage(world, config.getString("messages.bossbar.players-sleeping.message"),
                     config.getString("messages.bossbar.players-sleeping.color"), sleepingPercentage);
         } else if (needed == 0) {
-            messages.sendActionBarMessage(world, config.getString("messages.actionbar.night-skipping"));
             messages.sendBossBarMessage(world, config.getString("messages.bossbar.night-skipping.message"),
                     config.getString("messages.bossbar.night-skipping.color"), 1);
 
