@@ -37,7 +37,7 @@ public class Checker extends BukkitRunnable {
         // The others are simple enough that we can use lambdas
         providers.add(player -> harbor.getConfig().getBoolean("exclusions.ignored-permission", true) && player.hasPermission("harbor.ignored"));
         providers.add(player -> harbor.getConfig().getBoolean("exclusions.exclude-vanished", false) && isVanished(player));
-        providers.add(player -> harbor.getConfig().getBoolean("exclusions.exclude-afk", false) && harbor.getPlayerManager().isAfk(player));
+        providers.add(Player::isSleepingIgnored);
 
         int interval = harbor.getConfiguration().getInteger("interval");
         // Default to 1 if its invalid
