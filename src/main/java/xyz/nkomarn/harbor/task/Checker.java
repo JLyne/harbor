@@ -61,9 +61,7 @@ public class Checker extends BukkitRunnable {
      * @return Whether Harbor should run the night skipping check below.
      */
     private boolean validateWorld(@NotNull World world) {
-        return !skippingWorlds.contains(world.getUID())
-                && !isBlacklisted(world)
-                && isNight(world);
+        return !isBlacklisted(world) && isNight(world);
     }
 
     /**
@@ -102,11 +100,10 @@ public class Checker extends BukkitRunnable {
                     clearWeather(world);
                     resetStatus(world);
                 });
-                return;
+            } else if(!skippingWorlds.contains(world.getUID())) {
+                skippingWorlds.add(world.getUID());
+                new AccelerateNightTask(harbor, this, world);
             }
-
-            skippingWorlds.add(world.getUID());
-            new AccelerateNightTask(harbor, this, world);
         }
     }
 
