@@ -12,27 +12,31 @@ public class AccelerateNightTask extends BukkitRunnable {
     private final Harbor harbor;
     private final Checker checker;
     private final World world;
+    private final Config config;
+
+    private static final int dayTime = 23460;
 
     public AccelerateNightTask(@NotNull Harbor harbor, @NotNull Checker checker, @NotNull World world) {
         this.harbor = harbor;
         this.checker = checker;
         this.world = world;
 
-        checker.clearWeather(world);
+        config = harbor.getConfiguration();
+
         runTaskTimer(harbor, 1, 1);
     }
 
     @Override
     public void run() {
-        Config config = harbor.getConfiguration();
-
         long time = world.getTime();
-        double timeRate = config.getInteger("night-skip.time-rate");
-        int dayTime = Math.max(150, config.getInteger("night-skip.daytime-ticks"));
-        int sleeping = checker.getSleepingPlayers(world).size();
+        double timeRate = checker.getTimescale(world);
 
-        if (config.getBoolean("night-skip.proportional-acceleration")) {
-            timeRate = Math.min(timeRate, Math.round(timeRate / world.getPlayers().size() * Math.max(1, sleeping)));
+        if (timeRate == Double.POSITIVE_INFINITY) { // Instantly skip night if enabled
+            world.setTime(dayTime);
+            checker.clearWeather(world);
+            checker.resetStatus(world);
+            cancel();
+            return;
         }
 
         if (time >= (dayTime - timeRate * 1.5) && time <= dayTime) {
@@ -40,11 +44,14 @@ public class AccelerateNightTask extends BukkitRunnable {
                 world.getPlayers().forEach(player -> player.setStatistic(Statistic.TIME_SINCE_REST, 0));
             }
 
+            checker.clearWeather(world);
             checker.resetStatus(world);
             cancel();
             return;
         }
 
-        world.setTime(time + (int) timeRate);
+        if(timeRate > 1) {
+            world.setTime(time + (int) timeRate);
+        }
     }
 }

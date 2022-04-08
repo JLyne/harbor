@@ -6,13 +6,18 @@
 # Please make sure you negate the permission "essentials.sleepingignored" to
 # prevent issues with Harbor and server operators when running Essentials.
 
+night-speed:
+  enabled: true # Whether to increase night speed dynamically based on number of players sleeping
+  min-speed-multiplier: 2 # The minimum night speed when at least one player is sleeping
+  max-speed-multiplier: 10 # The maximum night speed when all players are sleeping, unless settings below are configured
+
 night-skip:
-  enabled: true # Skip the night if a percentage of the players in a world are sleeping
-  percentage: 50 # Percentage of players required to be sleeping to skip the night (0 - 100)
-  time-rate: 70 # The amount of ticks added to the current time every tick when skipping the night
-  daytime-ticks: 1200 # The time in ticks that Harbor considers day
-  instant-skip: false # Instantly skip the night when the percentage threshold is reached instead of showing the full animation
-  proportional-acceleration: false # Increase the night skipping speed based on the amount of sleeping players
+  enabled: true # Whether to skip the night at a fixed or instant speed once the given threshold of sleeping players has been hit
+  skip-percentage: 50 # Percentage of players required to be sleeping to skip the night (0 - 100)
+  instant-skip: true # Whether to skip night instantly when the threshold is hit
+  skip-speed-multiplier: 30 # Speed multiplier to use if the instant skipping is disabled
+
+morning:
   clear-rain: true # Clear rain (if it's raining) when the night is skipped
   clear-thunder: true # Clear thunder (if it's thundering) when the night is skipped
   reset-phantom-statistic: true # Treats everyone online as if they have slept in the last 3 days after the night is skipped (check out /gamerule doInsomnia on 1.15+)
@@ -43,12 +48,8 @@ whitelist-mode: false # Will treat the above list as a whitelist instead of a bl
 messages:
   bossbar:
     enabled: true
-    players-sleeping:
-      message: "&f&l[sleeping] out of [needed] are sleeping &7&l([more] more needed)"
-      color: BLUE
-    night-skipping:
-      message: "&f&lEveryone is sleeping. Sweet dreams!"
-      color: GREEN
+    message: "&a[sleeping]/[players] Sleeping &3- &b[12h]:[min] [mer_upper] ([timescale]x speed)"
+    color: GREEN
   miscellaneous:
     chat-prefix: "&8&l(&6&lHarbor&8&l)&f "
     unrecognized-command: "Unrecognized command."

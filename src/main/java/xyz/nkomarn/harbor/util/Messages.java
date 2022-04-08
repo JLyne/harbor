@@ -92,6 +92,7 @@ public class Messages implements Listener {
                 .replace("[sleeping]", String.valueOf(checker.getSleepingPlayers(world).size()))
                 .replace("[players]", String.valueOf(checker.getPlayers(world)))
                 .replace("[needed]", String.valueOf(checker.getSkipAmount(world)))
+                .replace("[timescale]", String.format("%.2f", checker.getTimescale(world)))
                 .replace("[12h]", String.valueOf(Time.ticksTo12Hours(time)))
                 .replace("[24h]", String.format("%02d", Time.ticksTo24Hours(time)))
                 .replace("[min]", String.format("%02d", Time.ticksToMinutes(time)))

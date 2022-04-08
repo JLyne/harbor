@@ -72,37 +72,18 @@ public class Checker extends BukkitRunnable {
         Config config = harbor.getConfiguration();
         Messages messages = harbor.getMessages();
 
-        int sleeping = getSleepingPlayers(world).size();
-        int needed = getNeeded(world);
-
-        if (sleeping < 1) {
+        if (getSleepingPlayers(world).isEmpty()) {
             messages.clearBar(world);
             return;
         }
 
-        if (needed > 0) {
-            double sleepingPercentage = Math.min(1, (double) sleeping / getSkipAmount(world));
+        messages.sendBossBarMessage(world, config.getString("messages.bossbar.message"),
+                config.getString("messages.bossbar.color"), 1);
 
-            messages.sendBossBarMessage(world, config.getString("messages.bossbar.players-sleeping.message"),
-                    config.getString("messages.bossbar.players-sleeping.color"), sleepingPercentage);
-        } else if (needed == 0) {
-            messages.sendBossBarMessage(world, config.getString("messages.bossbar.night-skipping.message"),
-                    config.getString("messages.bossbar.night-skipping.color"), 1);
-
-            if (!config.getBoolean("night-skip.enabled")) {
-                return;
-            }
-
-            if (config.getBoolean("night-skip.instant-skip")) {
-                Bukkit.getScheduler().runTask(harbor, () -> {
-                    world.setTime(config.getInteger("night-skip.daytime-ticks"));
-                    clearWeather(world);
-                    resetStatus(world);
-                });
-            } else if(!skippingWorlds.contains(world.getUID())) {
-                skippingWorlds.add(world.getUID());
-                new AccelerateNightTask(harbor, this, world);
-            }
+        if (!skippingWorlds.contains(world.getUID()) &&
+                (config.getBoolean("night-speed.enabled") || config.getBoolean("night-skip.enabled"))) {
+            skippingWorlds.add(world.getUID());
+            new AccelerateNightTask(harbor, this, world);
         }
     }
 
@@ -180,7 +161,7 @@ public class Checker extends BukkitRunnable {
      * @return The amount of players that need to sleep to skip the night.
      */
     public int getSkipAmount(@NotNull World world) {
-        return (int) Math.ceil(getPlayers(world) * (harbor.getConfiguration().getDouble("night-skip.percentage") / 100));
+        return (int) Math.ceil(getPlayers(world) * (harbor.getConfiguration().getDouble("night-skip.skip-percentage") / 100));
     }
 
     /**
@@ -191,8 +172,60 @@ public class Checker extends BukkitRunnable {
      * @return The amount of players that still need to get into bed to start the night skipping task.
      */
     public int getNeeded(@NotNull World world) {
-        double percentage = harbor.getConfiguration().getDouble("night-skip.percentage");
+        double percentage = harbor.getConfiguration().getDouble("night-skip.skip-percentage");
         return Math.max(0, (int) Math.ceil((getPlayers(world)) * (percentage / 100) - getSleepingPlayers(world).size()));
+    }
+
+    /**
+     * Returns the current timescale for the given world, based on the configured sleep speeds and skip thresholds
+     *
+     * @param world The world to check
+     *
+     * @return The timescale
+     */
+    public double getTimescale(@NotNull World world) {
+        Config config = harbor.getConfiguration();
+        int sleeping = getSleepingPlayers(world).size();
+        int total = getPlayers(world);
+
+        if(sleeping == 0 || total == 0) {
+            return 1;
+        }
+
+        boolean speedEnabled = config.getBoolean("night-speed.enabled");
+        boolean skipEnabled = config.getBoolean("night-skip.enabled");
+
+        boolean instantSkip = config.getBoolean("night-skip.instant-skip");
+        int skipPlayerCount = getSkipAmount(world);
+
+        int minMultiplier = config.getInteger("night-speed.min-speed-multiplier");
+        int maxMultiplier = config.getInteger("night-speed.max-speed-multiplier");
+        int skipMultiplier = config.getInteger("night-skip.skip-speed-multiplier");
+
+        if(skipEnabled && sleeping >= skipPlayerCount) { // Enough asleep players to skip
+            if (instantSkip) { // Instantly skip night if enabled
+                return Double.POSITIVE_INFINITY;
+            }
+
+            return skipMultiplier; // Otherwise use skip multiplier
+        } else if(speedEnabled) { // Speed up night
+            if (sleeping == 1 && total > 1) { // Single player sleeping, use min multiplier
+                return minMultiplier;
+            } else if(skipEnabled && sleeping == skipPlayerCount - 1) {
+                return maxMultiplier;
+            } else if(skipEnabled) { // Scale speed between 1 player and [skip threshold] - 1 players
+                return minMultiplier + Math.round(
+                        ((double) (maxMultiplier - minMultiplier) *
+                                (sleeping - 1)  //Ignore first sleeping player as handled by minSpeed
+                                / (skipPlayerCount - 2))); //Ignore first sleeping player and skip causing player
+            } else { // Otherwise scale between 1 and all players
+                //Ignore first sleeping player as handled by minSpeed
+                return minMultiplier + Math.round(
+                        (double) (maxMultiplier - minMultiplier) * (double) ((sleeping - 1) / (total - 1)));
+            }
+        }
+
+        return 1;
     }
 
     /**
