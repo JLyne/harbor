@@ -55,5 +55,5 @@ messages:
 
 # Spooky internal controls
 version: 1.6.4
-interval: 1
+interval: 10
 debug: false

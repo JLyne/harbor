@@ -42,7 +42,7 @@ public class Checker extends BukkitRunnable {
         // Default to 1 if its invalid
         if (interval <= 0)
             interval = 1;
-        runTaskTimerAsynchronously(harbor, 0L, interval * 20L);
+        runTaskTimerAsynchronously(harbor, 0L, interval);
     }
 
     @Override
