@@ -86,10 +86,17 @@ public class Messages implements Listener {
     @NotNull
     public String prepareMessage(@NotNull World world, @NotNull String message) {
         Checker checker = harbor.getChecker();
+        long time = world.getTime();
+
         return ChatColor.translateAlternateColorCodes('&', message
                 .replace("[sleeping]", String.valueOf(checker.getSleepingPlayers(world).size()))
                 .replace("[players]", String.valueOf(checker.getPlayers(world)))
                 .replace("[needed]", String.valueOf(checker.getSkipAmount(world)))
+                .replace("[12h]", String.valueOf(Time.ticksTo12Hours(time)))
+                .replace("[24h]", String.format("%02d", Time.ticksTo24Hours(time)))
+                .replace("[min]", String.format("%02d", Time.ticksToMinutes(time)))
+                .replace("[mer_upper]", Time.ticksIsAM(time) ? "AM" : "PM")
+                .replace("[mer_lower]", Time.ticksIsAM(time) ? "am" : "pm")
                 .replace("[more]", String.valueOf(checker.getNeeded(world))));
     }
 
