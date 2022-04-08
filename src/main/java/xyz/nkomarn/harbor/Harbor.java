@@ -14,7 +14,6 @@ import xyz.nkomarn.harbor.listener.BedListener;
 import xyz.nkomarn.harbor.task.Checker;
 import xyz.nkomarn.harbor.util.Config;
 import xyz.nkomarn.harbor.util.Messages;
-import xyz.nkomarn.harbor.util.Metrics;
 import xyz.nkomarn.harbor.util.PlayerManager;
 
 import java.util.Arrays;
@@ -44,12 +43,6 @@ public class Harbor extends JavaPlugin {
 
         getCommand("harbor").setExecutor(new HarborCommand(this));
         getCommand("forceskip").setExecutor(new ForceSkipCommand(this));
-
-
-
-        if (config.getBoolean("metrics")) {
-            new Metrics(this);
-        }
     }
 
 
