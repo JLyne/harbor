@@ -166,6 +166,8 @@ public class Checker extends BukkitRunnable {
      */
     @NotNull
     public List<Player> getSleepingPlayers(@NotNull World world) {
+        List<Player> excluded = getExcluded(world);
+
         return world.getPlayers().stream()
                 .filter(player -> player.getPose() == Pose.SLEEPING)
                 .collect(toList());
