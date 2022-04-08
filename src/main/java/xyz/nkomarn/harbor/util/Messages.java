@@ -47,23 +47,6 @@ public class Messages implements Listener {
     }
 
     /**
-     * Sends a message to all players in a given world.
-     *
-     * @param world   The world context.
-     * @param message The message to send.
-     */
-    public void sendWorldChatMessage(@NotNull World world, @NotNull String message) {
-        if (!config.getBoolean("messages.chat.enabled") || message.length() < 1) {
-            return;
-        }
-
-        String preparedMessage = prepareMessage(world, message);
-        for (Player player : world.getPlayers()) {
-            player.sendMessage(preparedMessage);
-        }
-    }
-
-    /**
      * Sends an actionbar message to all players in a given world.
      *
      * @param world   The world context.
@@ -78,22 +61,6 @@ public class Messages implements Listener {
         for (Player player : world.getPlayers()) {
             player.spigot().sendMessage(ChatMessageType.ACTION_BAR, preparedMessage);
         }
-    }
-
-    /**
-     * Selects a random message from a string list and sends it to the given world.
-     *
-     * @param world        The world context.
-     * @param listLocation The location of the message list in the configuration.
-     */
-    public void sendRandomChatMessage(@NotNull World world, @NotNull String listLocation) {
-        List<String> messages = config.getStringList(listLocation);
-
-        if (messages.size() < 1) {
-            return;
-        }
-
-        sendWorldChatMessage(world, messages.get(random.nextInt(messages.size())));
     }
 
     /**

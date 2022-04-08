@@ -41,19 +41,6 @@ blacklisted-worlds:
 whitelist-mode: false # Will treat the above list as a whitelist instead of a blacklist
 
 messages:
-  chat:
-    enabled: true
-    message-cooldown: 5 # The amount of time in seconds before a player can send another bed enter or leave message
-    player-sleeping: "&e[player] is now sleeping ([sleeping]/[needed], [more] more needed to skip)."
-    player-left-bed: "&e[player] got out of bed ([sleeping]/[needed], [more] more needed to skip)."
-    night-skipping:
-      - "&eAccelerating the night."
-      - "&eRapidly approaching daytime."
-    night-skipped:
-      - "&eThe night has been skipped."
-      - "&eAhhh, finally morning."
-      - "&eArghh, it's so bright outside."
-      - "&eRise and shine."
   actionbar:
     enabled: true
     players-sleeping: "&e[sleeping] out of [needed] players are sleeping ([more] more needed to skip)"

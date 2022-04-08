@@ -18,7 +18,6 @@ public class AccelerateNightTask extends BukkitRunnable {
         this.checker = checker;
         this.world = world;
 
-        harbor.getMessages().sendRandomChatMessage(world, "messages.chat.night-skipping");
         checker.clearWeather(world);
         runTaskTimer(harbor, 1, 1);
     }

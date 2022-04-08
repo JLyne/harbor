@@ -255,7 +255,6 @@ public class Checker extends BukkitRunnable {
         harbor.getServer().getScheduler().runTaskLater(harbor, () -> {
             skippingWorlds.remove(world.getUID());
             harbor.getPlayerManager().clearCooldowns();
-            harbor.getMessages().sendRandomChatMessage(world, "messages.chat.night-skipped");
         }, 20L);
     }
 
