@@ -102,7 +102,7 @@ public class Checker extends BukkitRunnable {
      * @return Whether it is currently night in the provided world.
      */
     private boolean isNight(@NotNull World world) {
-        return world.getTime() > 12950 || world.getTime() < 23950;
+        return world.getTime() > 12541L && world.getTime() < 23460L;
     }
 
     /**
