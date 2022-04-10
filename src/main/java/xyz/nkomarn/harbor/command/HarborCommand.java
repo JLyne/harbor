@@ -1,5 +1,6 @@
 package xyz.nkomarn.harbor.command;
 
+import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
@@ -22,18 +23,20 @@ public class HarborCommand implements TabExecutor {
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
+        MiniMessage miniMessage = harbor.getMiniMessage();
+
         if (args.length < 1 || !sender.hasPermission("harbor.admin")) {
-            sender.sendMessage(config.getPrefix() + "Harbor " + harbor.getVersion() + " by TechToolbox (@nkomarn).");
+            sender.sendMessage(miniMessage.deserialize(config.getPrefix() + "Harbor " + harbor.getVersion() + " by TechToolbox (@nkomarn)."));
             return true;
         }
 
         if (args[0].equalsIgnoreCase("reload")) {
             config.reload();
-            sender.sendMessage(config.getPrefix() + "Reloaded configuration.");
+            sender.sendMessage(miniMessage.deserialize(config.getPrefix() + "Reloaded configuration."));
             return true;
         }
 
-        sender.sendMessage(config.getPrefix() + config.getString("messages.miscellaneous.unrecognized-command"));
+        sender.sendMessage(miniMessage.deserialize(config.getPrefix() + config.getString("messages.miscellaneous.unrecognized-command")));
         return true;
     }
 

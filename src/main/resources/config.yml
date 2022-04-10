@@ -49,18 +49,18 @@ whitelist-mode: false # Will treat the above list as a whitelist instead of a bl
 messages:
   title:
     enabled: true
-    sleep-title: '&b[12h]:[min] [mer_upper]'
-    sleep-subtitle: '&a[sleeping]/[players] Sleeping &3([timescale]x speed)'
-    morning-title: '&e[12h]:[min] [mer_upper]'
-    morning-subtitle: '&aRise and shine, [displayname]!'
+    sleep-title: '<aqua>[12h]:[min] [mer_upper]'
+    sleep-subtitle: '<green>[sleeping]/[players] Sleeping <dark_aqua>([timescale]x speed)'
+    morning-title: '<yellow>>[12h]:[min] [mer_upper]'
+    morning-subtitle: '<green>Rise and shine, [displayname]!'
     stay-ticks: 20
     fade-ticks: 40
   bossbar:
     enabled: true
-    message: "&a[sleeping]/[players] Sleeping &3- &b[12h]:[min] [mer_upper] ([timescale]x speed)"
+    message: "<green>[sleeping]/[players] Sleeping <dark_aqua>- <aqua>[12h]:[min] [mer_upper] ([timescale]x speed)"
     color: GREEN
   miscellaneous:
-    chat-prefix: "&8&l(&6&lHarbor&8&l)&f "
+    chat-prefix: "<dark_gray><bold>(<gold><bold>Harbor<dark_gray><bold>)<reset> "
     unrecognized-command: "Unrecognized command."
 
 # Spooky internal controls

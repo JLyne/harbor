@@ -1,6 +1,7 @@
 package xyz.nkomarn.harbor;
 
 import com.earth2me.essentials.Essentials;
+import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.World;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -25,6 +26,7 @@ public class Harbor extends JavaPlugin {
     private Messages messages;
     private PlayerManager playerManager;
     private Essentials essentials;
+    private final MiniMessage miniMessage = MiniMessage.miniMessage();
 
     public void onEnable() {
         PluginManager pluginManager = getServer().getPluginManager();
@@ -72,6 +74,11 @@ public class Harbor extends JavaPlugin {
     @NotNull
     public Messages getMessages() {
         return messages;
+    }
+
+    @NotNull
+    public MiniMessage getMiniMessage() {
+        return miniMessage;
     }
 
     @NotNull
