@@ -21,6 +21,7 @@ morning:
   clear-rain: true # Clear rain (if it's raining) when the night is skipped
   clear-thunder: true # Clear thunder (if it's thundering) when the night is skipped
   reset-phantom-statistic: true # Treats everyone online as if they have slept in the last 3 days after the night is skipped (check out /gamerule doInsomnia on 1.15+)
+  play-sound: 'ENTITY_PLAYER_LEVELUP'
 
 exclusions:
   ignored-permission: true # Exclude players with the permission "harbor.ignored" from the sleeping count
@@ -46,6 +47,14 @@ blacklisted-worlds:
 whitelist-mode: false # Will treat the above list as a whitelist instead of a blacklist
 
 messages:
+  title:
+    enabled: true
+    sleep-title: '&b[12h]:[min] [mer_upper]'
+    sleep-subtitle: '&a[sleeping]/[players] Sleeping &3([timescale]x speed)'
+    morning-title: '&e[12h]:[min] [mer_upper]'
+    morning-subtitle: '&aRise and shine, [displayname]!'
+    stay-ticks: 20
+    fade-ticks: 40
   bossbar:
     enabled: true
     message: "&a[sleeping]/[players] Sleeping &3- &b[12h]:[min] [mer_upper] ([timescale]x speed)"

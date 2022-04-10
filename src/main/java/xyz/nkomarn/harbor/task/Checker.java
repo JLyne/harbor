@@ -1,6 +1,9 @@
 package xyz.nkomarn.harbor.task;
 
+import com.google.common.base.Enums;
+import com.google.common.base.Optional;
 import org.bukkit.Bukkit;
+import org.bukkit.Sound;
 import org.bukkit.World;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -71,6 +74,10 @@ public class Checker extends BukkitRunnable {
     private void checkWorld(@NotNull World world) {
         Config config = harbor.getConfiguration();
         Messages messages = harbor.getMessages();
+
+        //Send title to excluded sleeping players too
+        messages.sendTitleMessage(getSleepingPlayers(world, true), config.getString("messages.title.sleep-title"),
+                config.getString("messages.title.sleep-subtitle"));
 
         if (getSleepingPlayers(world).isEmpty()) {
             messages.clearBar(world);
@@ -146,10 +153,23 @@ public class Checker extends BukkitRunnable {
      */
     @NotNull
     public List<Player> getSleepingPlayers(@NotNull World world) {
+        return getSleepingPlayers(world, true);
+    }
+
+    /**
+     * Returns a list of all sleeping players in a given world.
+     *
+     * @param world The world in which to check for sleeping players.
+     * @param includeExcluded Whether to include players that are excluded by an ExclusionProvider
+     *
+     * @return A list of all currently sleeping players in the provided world.
+     */
+    @NotNull
+    public List<Player> getSleepingPlayers(@NotNull World world, boolean includeExcluded) {
         List<Player> excluded = getExcluded(world);
 
         return world.getPlayers().stream()
-                .filter(e -> !excluded.contains(e) && e.isSleeping())
+                .filter(e -> (includeExcluded || !excluded.contains(e)) && e.isSleeping())
                 .collect(toList());
     }
 
@@ -293,9 +313,25 @@ public class Checker extends BukkitRunnable {
      * @param world The world for which to kick players out of bed.
      */
     public void wakeUpPlayers(@NotNull World world) {
-        ensureMain(() -> world.getPlayers().stream()
-                .filter(LivingEntity::isSleeping)
-                .forEach(player -> player.wakeup(true)));
+        ensureMain(() -> {
+            Config config = harbor.getConfiguration();
+            Optional<Sound> sound = Enums.getIfPresent(Sound.class, config.getString("morning.play-sound"));
+
+            world.getPlayers().stream()
+                    .filter(LivingEntity::isSleeping)
+                    .forEach(player -> {
+                        if (sound.isPresent()) {
+                            player.playSound(player.getLocation(), sound.get(), 1.0f, 1.0f);
+                        }
+
+                        //Send title to excluded sleeping players too
+                        harbor.getMessages().sendTitleMessage(player,
+                                                              config.getString("messages.title.morning-title"),
+                                                              config.getString("messages.title.morning-subtitle"));
+
+                        player.wakeup(true);
+                    });
+        });
     }
 
     /**

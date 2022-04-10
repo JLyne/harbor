@@ -2,9 +2,6 @@ package xyz.nkomarn.harbor.util;
 
 import com.google.common.base.Enums;
 import me.clip.placeholderapi.PlaceholderAPI;
-import net.md_5.bungee.api.ChatMessageType;
-import net.md_5.bungee.api.chat.BaseComponent;
-import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.World;
@@ -44,6 +41,40 @@ public class Messages implements Listener {
 
             registerBar(world);
         }
+    }
+
+    /**
+     * Sends a title/subtitle message to the given players
+     *
+     * @param title The title message to send.
+     * @param subTitle The subtitle message to send.
+     * @param players Players to send the title to
+     */
+    public void sendTitleMessage(@NotNull List<Player> players, @NotNull String title, @NotNull String subTitle) {
+        if (!config.getBoolean("messages.title.enabled") || (title.length() < 1 & subTitle.length() < 1)) {
+            return;
+        }
+
+        for (Player player : players) {
+            sendTitleMessage(player, title, subTitle);
+        }
+    }
+
+    /**
+     * Sends a title/subtitle message to the given player
+     *
+     * @param title The title message to send.
+     * @param subTitle The subtitle message to send.
+     * @param player Player to send the title to
+     */
+    public void sendTitleMessage(@NotNull Player player, @NotNull String title, @NotNull String subTitle) {
+        if (!config.getBoolean("messages.title.enabled") || (title.length() < 1 & subTitle.length() < 1)) {
+            return;
+        }
+
+        int fadeTicks = config.getInteger("messages.title.fade-ticks");
+        int stayTicks = config.getInteger("messages.title.stay-ticks");
+        player.sendTitle(prepareMessage(player, title), prepareMessage(player, subTitle), 0, stayTicks, fadeTicks);
     }
 
     /**
@@ -103,9 +134,26 @@ public class Messages implements Listener {
 
     @NotNull
     public String prepareMessage(@NotNull Player player, @NotNull String message) {
+        Checker checker = harbor.getChecker();
+        World world = player.getLocation().getWorld();
         String output = ChatColor.translateAlternateColorCodes('&', message
                 .replace("[player]", player.getName())
                 .replace("[displayname]", player.getDisplayName()));
+
+        if(world != null) {
+            long time = world.getTime();
+
+            output = output.replace("[sleeping]", String.valueOf(checker.getSleepingPlayers(world).size()))
+                .replace("[players]", String.valueOf(checker.getPlayers(world)))
+                .replace("[needed]", String.valueOf(checker.getSkipAmount(world)))
+                .replace("[timescale]", String.format("%.2f", checker.getTimescale(world)))
+                .replace("[12h]", String.valueOf(Time.ticksTo12Hours(time)))
+                .replace("[24h]", String.format("%02d", Time.ticksTo24Hours(time)))
+                .replace("[min]", String.format("%02d", Time.ticksToMinutes(time)))
+                .replace("[mer_upper]", Time.ticksIsAM(time) ? "AM" : "PM")
+                .replace("[mer_lower]", Time.ticksIsAM(time) ? "am" : "pm")
+                .replace("[more]", String.valueOf(checker.getNeeded(world)));
+        }
 
         if (papiPresent) {
             output = PlaceholderAPI.setPlaceholders(player, output);
