@@ -302,6 +302,7 @@ public class Checker extends BukkitRunnable {
     public void resetStatus(@NotNull World world) {
         wakeUpPlayers(world);
         harbor.getServer().getScheduler().runTaskLater(harbor, () -> {
+            harbor.getMessages().clearBar(world);
             skippingWorlds.remove(world.getUID());
             harbor.getPlayerManager().clearCooldowns();
         }, 20L);
