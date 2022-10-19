@@ -153,7 +153,7 @@ public class Checker extends BukkitRunnable {
      */
     @NotNull
     public List<Player> getSleepingPlayers(@NotNull World world) {
-        return getSleepingPlayers(world, true);
+        return getSleepingPlayers(world, false);
     }
 
     /**
