@@ -53,7 +53,7 @@ public class Messages implements Listener {
      * @param players Players to send the title to
      */
     public void sendTitleMessage(@NotNull List<Player> players, @NotNull String title, @NotNull String subTitle) {
-        if (!config.getBoolean("messages.title.enabled") || (title.length() < 1 & subTitle.length() < 1)) {
+        if (!config.getBoolean("messages.title.enabled") || (title.isEmpty() & subTitle.isEmpty())) {
             return;
         }
 
@@ -70,7 +70,7 @@ public class Messages implements Listener {
      * @param player Player to send the title to
      */
     public void sendTitleMessage(@NotNull Player player, @NotNull String title, @NotNull String subTitle) {
-        if (!config.getBoolean("messages.title.enabled") || (title.length() < 1 & subTitle.length() < 1)) {
+        if (!config.getBoolean("messages.title.enabled") || (title.isEmpty() & subTitle.isEmpty())) {
             return;
         }
 
@@ -91,7 +91,7 @@ public class Messages implements Listener {
      * @param percentage The bossbar percentage to set.
      */
     public void sendBossBarMessage(@NotNull World world, @NotNull String message, @NotNull String color, float percentage) {
-        if (!config.getBoolean("messages.bossbar.enabled") || message.length() < 1) {
+        if (!config.getBoolean("messages.bossbar.enabled") || message.isEmpty()) {
             return;
         }
 
