@@ -4,7 +4,7 @@ main: "xyz.nkomarn.harbor.Harbor"
 author: "TechToolbox (@nkomarn)"
 website: "https://nkomarn.xyz"
 version: "1.7.0-SNAPSHOT"
-api-version: "1.19"
+api-version: "1.20.6"
 
 softdepend:
   - "Essentials"
