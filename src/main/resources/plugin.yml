@@ -9,14 +9,6 @@ api-version: "1.21.5"
 softdepend:
   - "PlaceholderAPI"
 
-commands:
-  harbor:
-    description: "Base command for Harbor."
-    usage: "/harbor <subcommand>"
-  forceskip:
-    description: "Allows players to accelerate the night of their current world."
-    permission: "harbor.forceskip"
-
 permissions:
   harbor.admin:
     default: op

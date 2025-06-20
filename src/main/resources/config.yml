@@ -47,7 +47,6 @@ messages:
     color: GREEN
   miscellaneous:
     chat-prefix: "<dark_gray><bold>(<gold><bold>Harbor<dark_gray><bold>)<reset> "
-    unrecognized-command: "Unrecognized command."
 
 # Spooky internal controls
 version: 1.6.4
