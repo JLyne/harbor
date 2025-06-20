@@ -229,7 +229,7 @@ public class Checker extends BukkitRunnable {
 
             return skipMultiplier; // Otherwise use skip multiplier
         } else if(speedEnabled) { // Speed up night
-            if (sleeping == 1 && total > 1) { // Single player sleeping, use min multiplier
+            if (sleeping == 1 && total > 2) { // Single player sleeping with > 2 players online, use min multiplier
                 return minMultiplier;
             } else if(skipEnabled && sleeping == skipPlayerCount - 1) {
                 return maxMultiplier;
