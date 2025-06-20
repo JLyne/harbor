@@ -1,19 +1,20 @@
 name: "Harbor"
 description: "Harbor redefines how sleep works in your server, making it easier for all the online players to get in bed quickly and skip through the night!"
 main: "xyz.nkomarn.harbor.Harbor"
-author: "TechToolbox (@nkomarn)"
-website: "https://nkomarn.xyz"
+authors:
+  - "Jim (AnEnragedPigeon)"
+  - "TechToolbox (@nkomarn)"
 version: "1.7.0-SNAPSHOT"
 api-version: "1.21.5"
 
-softdepend:
-  - "PlaceholderAPI"
+dependencies:
+  server:
+    PlaceholderAPI:
+      required: false
+      load: BEFORE
 
 permissions:
   harbor.admin:
-    default: op
-  harbor.forceskip:
-    description: "Permits usage of the /forceskip command."
     default: op
   harbor.ignored:
     default: false

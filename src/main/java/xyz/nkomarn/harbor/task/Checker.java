@@ -285,16 +285,6 @@ public class Checker extends BukkitRunnable {
     }
 
     /**
-     * Forces a world to begin skipping the night, skipping over the checks.
-     *
-     * @param world The world in which to force night skipping.
-     */
-    public void forceSkip(@NotNull World world) {
-        skippingWorlds.add(world.getUID());
-        new AccelerateNightTask(harbor, this, world);
-    }
-
-    /**
      * Resets the provided world to a non-skipping status.
      *
      * @param world The world for which to reset status.

@@ -57,33 +57,10 @@ public class Harbor extends JavaPlugin {
                     return Command.SINGLE_SUCCESS;
                 });
 
-        LiteralArgumentBuilder<CommandSourceStack> forceSkipCommand = literal("forceskip")
-                .requires(source -> source.getSender().hasPermission("harbor.forceskip"))
-                .executes(ctx -> {
-                    if (!(ctx.getSource().getSender() instanceof Player player)) {
-                        ctx.getSource().getSender()
-                                .sendRichMessage(config.getPrefix() + "This command can only be used by a player.");
-                        return Command.SINGLE_SUCCESS;
-                    }
-
-                    World world = player.getWorld();
-
-                    if (getChecker().isSkipping(world)) {
-                        player.sendRichMessage(config.getPrefix() + "This world's time is already being accelerated.");
-                    } else {
-                        player.sendRichMessage(config.getPrefix() + "Forcing night skip in your world.");
-                        getChecker().forceSkip(world);
-                    }
-
-                    return Command.SINGLE_SUCCESS;
-                });
-
         commands.register(literal("harbor")
                                   .requires(source ->
-                                                    source.getSender().hasPermission("harbor.admin")
-                                                            || source.getSender().hasPermission("harbor.forceskip"))
+                                                    source.getSender().hasPermission("harbor.admin"))
                                   .then(reloadCommand)
-                                  .then(forceSkipCommand)
                                   .build(), "Main command for Harbor");
     }
 
