@@ -21,7 +21,7 @@ morning:
   clear-rain: true # Clear rain (if it's raining) when the night is skipped
   clear-thunder: true # Clear thunder (if it's thundering) when the night is skipped
   reset-phantom-statistic: true # Treats everyone online as if they have slept in the last 3 days after the night is skipped (check out /gamerule doInsomnia on 1.15+)
-  play-sound: 'ENTITY_PLAYER_LEVELUP'
+  play-sound: 'minecraft:entity.player.levelup'
 
 exclusions:
   ignored-permission: true # Exclude players with the permission "harbor.ignored" from the sleeping count

@@ -20,6 +20,7 @@ import xyz.nkomarn.harbor.util.PlayerManager;
 import java.util.Arrays;
 import java.util.Optional;
 
+@SuppressWarnings("UnstableApiUsage")
 public class Harbor extends JavaPlugin {
     private Config config;
     private Checker checker;
@@ -58,7 +59,7 @@ public class Harbor extends JavaPlugin {
 
     @NotNull
     public String getVersion() {
-        return getDescription().getVersion();
+        return getPluginMeta().getVersion();
     }
 
     @NotNull

@@ -1,9 +1,8 @@
 package xyz.nkomarn.harbor.task;
 
-import com.google.common.base.Enums;
-import com.google.common.base.Optional;
+import net.kyori.adventure.sound.Sound;
 import org.bukkit.Bukkit;
-import org.bukkit.Sound;
+import org.bukkit.NamespacedKey;
 import org.bukkit.World;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -22,6 +21,7 @@ import java.util.Set;
 import java.util.UUID;
 
 import static java.util.stream.Collectors.toList;
+import static net.kyori.adventure.sound.Sound.sound;
 
 public class Checker extends BukkitRunnable {
     private final Set<ExclusionProvider> providers;
@@ -316,13 +316,13 @@ public class Checker extends BukkitRunnable {
     public void wakeUpPlayers(@NotNull World world) {
         ensureMain(() -> {
             Config config = harbor.getConfiguration();
-            Optional<Sound> sound = Enums.getIfPresent(Sound.class, config.getString("morning.play-sound"));
+            NamespacedKey sound = NamespacedKey.fromString(config.getString("morning.play-sound"));
 
             world.getPlayers().stream()
                     .filter(LivingEntity::isSleeping)
                     .forEach(player -> {
-                        if (sound.isPresent()) {
-                            player.playSound(player.getLocation(), sound.get(), 1.0f, 1.0f);
+                        if (sound != null) {
+                            player.playSound(sound(sound, Sound.Source.AMBIENT, 1.0F, 1.0F));
                         }
 
                         //Send title to excluded sleeping players too
