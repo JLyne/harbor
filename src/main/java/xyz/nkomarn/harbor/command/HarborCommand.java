@@ -26,17 +26,17 @@ public class HarborCommand implements TabExecutor {
         MiniMessage miniMessage = harbor.getMiniMessage();
 
         if (args.length < 1 || !sender.hasPermission("harbor.admin")) {
-            sender.sendMessage(miniMessage.deserialize(config.getPrefix() + "Harbor " + harbor.getVersion() + " by TechToolbox (@nkomarn)."));
+            sender.sendRichMessage(config.getPrefix() + "Harbor " + harbor.getVersion() + " by TechToolbox (@nkomarn).");
             return true;
         }
 
         if (args[0].equalsIgnoreCase("reload")) {
             config.reload();
-            sender.sendMessage(miniMessage.deserialize(config.getPrefix() + "Reloaded configuration."));
+            sender.sendRichMessage(config.getPrefix() + "Reloaded configuration.");
             return true;
         }
 
-        sender.sendMessage(miniMessage.deserialize(config.getPrefix() + config.getString("messages.miscellaneous.unrecognized-command")));
+        sender.sendRichMessage(config.getPrefix() + config.getString("messages.miscellaneous.unrecognized-command"));
         return true;
     }
 

@@ -23,7 +23,7 @@ public class ForceSkipCommand implements CommandExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String s, @NotNull String[] args) {
         if (!(sender instanceof Player player)) {
-            sender.sendMessage(config.getPrefix() + "This command can only be used by a player.");
+            sender.sendRichMessage(config.getPrefix() + "This command can only be used by a player.");
             return true;
         }
 
@@ -31,9 +31,9 @@ public class ForceSkipCommand implements CommandExecutor {
         Checker checker = harbor.getChecker();
 
         if (checker.isSkipping(world)) {
-            sender.sendMessage(config.getPrefix() + "This world's time is already being accelerated.");
+            sender.sendRichMessage(config.getPrefix() + "This world's time is already being accelerated.");
         } else {
-            sender.sendMessage(config.getPrefix() + "Forcing night skip in your world.");
+            sender.sendRichMessage(config.getPrefix() + "Forcing night skip in your world.");
             checker.forceSkip(world);
         }
 
