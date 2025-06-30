@@ -5,7 +5,7 @@ authors:
   - "Jim (AnEnragedPigeon)"
   - "TechToolbox (@nkomarn)"
 version: "1.7.0-SNAPSHOT"
-api-version: "1.21.6"
+api-version: "1.21.7"
 
 dependencies:
   server:
