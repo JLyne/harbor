@@ -12,9 +12,10 @@ public class AccelerateNightTask extends BukkitRunnable {
 
 	private static final int dayTime = 23460;
 
-    public AccelerateNightTask(@NotNull Harbor harbor, @NotNull Checker checker, @NotNull World world) {
-		this.checker = checker;
+    public AccelerateNightTask(@NotNull Harbor harbor, @NotNull World world) {
+		this.checker = harbor.getChecker();
         this.world = world;
+        harbor.getSLF4JLogger().info("AccelerateNightTask for {}", world.key());
 
 		runTaskTimer(harbor, 1, 1);
     }

@@ -1,11 +1,14 @@
 [versions]
 pluginYmlPaper = "0.9.0"
-paperApi = "26.1.2.build.+"
+paper = "26.1.2.build.+"
 placeholderApi = "2.12.2"
+paperweightUserdev = "2.0.0-beta.21"
 
 [libraries]
-paperApi = { group = "io.papermc.paper", name = "paper-api", version.ref = "paperApi" }
+paperApi = { group = "io.papermc.paper", name = "paper-api", version.ref = "paper" }
+paperweightBundle = { group = "io.papermc.paper", name = "dev-bundle", version.ref = "paper" }
 placeholderApi = { group = "me.clip", name = "placeholderapi", version.ref = "placeholderApi" }
 
 [plugins]
 pluginYmlPaper = { id = "de.eldoria.plugin-yml.paper", version.ref = "pluginYmlPaper" }
+paperweightUserdev = { id = "io.papermc.paperweight.userdev", version.ref = "paperweightUserdev" }

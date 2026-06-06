@@ -24,9 +24,9 @@ import static java.util.stream.Collectors.toList;
 import static net.kyori.adventure.sound.Sound.sound;
 
 public class Checker extends BukkitRunnable {
-    private final Set<ExclusionProvider> providers;
-    private final Harbor harbor;
-    private final Set<UUID> skippingWorlds;
+    protected final Set<ExclusionProvider> providers;
+    protected final Harbor harbor;
+    protected final Set<UUID> skippingWorlds;
 
     public Checker(@NotNull Harbor harbor) {
         this.harbor = harbor;
@@ -90,7 +90,7 @@ public class Checker extends BukkitRunnable {
         if (!skippingWorlds.contains(world.getUID()) &&
                 (config.getBoolean("night-speed.enabled") || config.getBoolean("night-skip.enabled"))) {
             skippingWorlds.add(world.getUID());
-            new AccelerateNightTask(harbor, this, world);
+            new AccelerateNightTask(harbor, world);
         }
     }
 
@@ -101,7 +101,7 @@ public class Checker extends BukkitRunnable {
      *
      * @return Whether it is currently night in the provided world.
      */
-    private boolean isNight(@NotNull World world) {
+    protected boolean isNight(@NotNull World world) {
         return world.getTime() > 12541L && world.getTime() < 23460L;
     }
 
@@ -112,8 +112,8 @@ public class Checker extends BukkitRunnable {
      *
      * @return Whether a world is excluded from Harbor checks.
      */
-    public boolean isBlacklisted(@NotNull World world) {
-        boolean blacklisted = harbor.getConfiguration().getStringList("blacklisted-worlds").contains(world.getName());
+    private boolean isBlacklisted(@NotNull World world) {
+        boolean blacklisted = harbor.getConfiguration().getStringList("blacklist").contains(world.getName());
 
         if (harbor.getConfiguration().getBoolean("whitelist-mode")) {
             return !blacklisted;
@@ -141,7 +141,7 @@ public class Checker extends BukkitRunnable {
      * @return The amount of players in a given world, minus excluded players.
      */
     public int getPlayers(@NotNull World world) {
-        return Math.max(0, world.getPlayers().size() - getExcluded(world).size());
+        return Math.max(0, world.getPlayerCount() - getExcluded(world).size());
     }
 
     /**
@@ -204,7 +204,6 @@ public class Checker extends BukkitRunnable {
      * @return The timescale
      */
     public double getTimescale(@NotNull World world) {
-        Config config = harbor.getConfiguration();
         int sleeping = getSleepingPlayers(world).size();
         int total = getPlayers(world);
 
@@ -212,11 +211,16 @@ public class Checker extends BukkitRunnable {
             return 1;
         }
 
+        int skipPlayerCount = getSkipAmount(world);
+        return calculateTimescale(sleeping, total, skipPlayerCount);
+    }
+    
+    protected double calculateTimescale(int sleeping, int total, int skipPlayerCount) {
+        Config config = harbor.getConfiguration();
         boolean speedEnabled = config.getBoolean("night-speed.enabled");
         boolean skipEnabled = config.getBoolean("night-skip.enabled");
 
         boolean instantSkip = config.getBoolean("night-skip.instant-skip");
-        int skipPlayerCount = getSkipAmount(world);
 
         int minMultiplier = config.getInteger("night-speed.min-speed-multiplier");
         int maxMultiplier = config.getInteger("night-speed.max-speed-multiplier");
@@ -256,7 +260,7 @@ public class Checker extends BukkitRunnable {
      * @return A list of excluded players in the given world.
      */
     @NotNull
-    private List<Player> getExcluded(@NotNull World world) {
+    protected List<Player> getExcluded(@NotNull World world) {
         return world.getPlayers().stream()
                 .filter(this::isExcluded)
                 .collect(toList());
@@ -269,7 +273,7 @@ public class Checker extends BukkitRunnable {
      *
      * @return Whether the given player is excluded.
      */
-    private boolean isExcluded(@NotNull Player player) {
+    protected boolean isExcluded(@NotNull Player player) {
         return providers.stream().anyMatch(provider -> provider.isExcluded(player));
     }
 
@@ -289,7 +293,7 @@ public class Checker extends BukkitRunnable {
      *
      * @param world The world for which to reset status.
      */
-    public void resetStatus(@NotNull World world) {
+    void resetStatus(@NotNull World world) {
         wakeUpPlayers(world);
         harbor.getServer().getScheduler().runTaskLater(harbor, () -> {
             harbor.getMessages().clearBar(world);
@@ -302,7 +306,7 @@ public class Checker extends BukkitRunnable {
      *
      * @param world The world for which to kick players out of bed.
      */
-    public void wakeUpPlayers(@NotNull World world) {
+    protected void wakeUpPlayers(@NotNull World world) {
         ensureMain(() -> {
             Config config = harbor.getConfiguration();
             NamespacedKey sound = NamespacedKey.fromString(config.getString("morning.play-sound"));
@@ -329,7 +333,7 @@ public class Checker extends BukkitRunnable {
      *
      * @param world The world for which to clear weather.
      */
-    public void clearWeather(@NotNull World world) {
+    void clearWeather(@NotNull World world) {
         ensureMain(() -> {
             Config config = harbor.getConfiguration();
 
@@ -348,7 +352,7 @@ public class Checker extends BukkitRunnable {
      *
      * @param runnable The task to run on the server thread.
      */
-    public void ensureMain(@NotNull Runnable runnable) {
+    protected void ensureMain(@NotNull Runnable runnable) {
         if (!Bukkit.isPrimaryThread()) {
             Bukkit.getScheduler().runTask(harbor, runnable);
         } else {

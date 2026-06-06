@@ -4,6 +4,7 @@ import net.minecrell.pluginyml.paper.PaperPluginDescription
 plugins {
     java
     alias(libs.plugins.pluginYmlPaper)
+    alias(libs.plugins.paperweightUserdev)
 }
 
 group = "uk.co.notnull"
@@ -28,17 +29,12 @@ repositories {
 dependencies {
 	compileOnly(libs.paperApi)
 	compileOnly(libs.placeholderApi)
-}
-
-tasks {
-    generatePaperPluginDescription {
-        useDefaultCentralProxy()
-    }
+    paperweightDevelopmentBundle(libs.paperweightBundle)
 }
 
 paper {
     main = "xyz.nkomarn.harbor.Harbor"
-    apiVersion = libs.versions.paperApi.get().replace(".build.+", "")
+    apiVersion = libs.versions.paper.get().replace(".build.+", "")
     authors = listOf("Jim (AnEnragedPigeon)", "TechToolbox (@nkomarn)")
     description = "Harbor redefines how sleep works in your server, making it easier for all the online players to get in bed quickly and skip through the night!"
     
@@ -63,5 +59,9 @@ tasks {
     compileJava {
         options.compilerArgs.addAll(listOf("-Xlint:all", "-Xlint:-processing"))
         options.encoding = "UTF-8"
+    }
+    
+    generatePaperPluginDescription {
+        useDefaultCentralProxy()
     }
 }

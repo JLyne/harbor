@@ -14,6 +14,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 import xyz.nkomarn.harbor.api.ExclusionProvider;
 import xyz.nkomarn.harbor.task.Checker;
+import xyz.nkomarn.harbor.task.GlobalTimeChecker;
 import xyz.nkomarn.harbor.util.Config;
 import xyz.nkomarn.harbor.util.Messages;
 
@@ -25,11 +26,12 @@ public class Harbor extends JavaPlugin {
     private Messages messages;
     private final MiniMessage miniMessage = MiniMessage.miniMessage();
 
-    public void onEnable() {
+	public void onEnable() {
+		boolean globalTime = io.papermc.paper.configuration.GlobalConfiguration.get().time.affectsAllWorlds;
         PluginManager pluginManager = getServer().getPluginManager();
 
         config = new Config(this);
-        checker = new Checker(this);
+        checker = globalTime ? new GlobalTimeChecker(this) : new Checker(this);
         messages = new Messages(this);
 
         pluginManager.registerEvents(messages, this);

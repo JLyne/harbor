@@ -26,10 +26,11 @@ exclusions:
   exclude-spectator: true # Exclude players in spectator mode from the sleeping count
   exclude-vanished: true # Exclude vanished players from the sleeping count
 
-# Blacklist for worlds- Harbor will ignore these worlds
-blacklisted-worlds:
-  - "world_nether"
-  - "world_the_end"
+# Blacklist
+# If paper's time.affects-all-worlds setting is enabled, Harbor will treat this list as a list of world clocks to ignore
+# Otherwise, Harbor will treat this list as a list of worlds to ignore
+blacklist:
+  - "minecraft:the_end"
 whitelist-mode: false # Will treat the above list as a whitelist instead of a blacklist
 
 messages:

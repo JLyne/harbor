@@ -16,6 +16,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.event.world.WorldLoadEvent;
+import org.bukkit.event.world.WorldUnloadEvent;
 import org.jetbrains.annotations.NotNull;
 import xyz.nkomarn.harbor.Harbor;
 import xyz.nkomarn.harbor.task.Checker;
@@ -37,10 +38,6 @@ public class Messages implements Listener {
         this.miniMessage = harbor.getMiniMessage();
 
         for (World world : Bukkit.getWorlds()) {
-            if (harbor.getChecker().isBlacklisted(world)) {
-                return;
-            }
-
             registerBar(world);
         }
     }
@@ -185,6 +182,12 @@ public class Messages implements Listener {
     @EventHandler
     public void onWorldLoad(@NotNull WorldLoadEvent event) {
         registerBar(event.getWorld());
+    }
+    
+    @EventHandler
+    public void onWorldUnload(@NotNull WorldUnloadEvent event) {
+        clearBar(event.getWorld());
+        bossBars.remove(event.getWorld().getUID());
     }
 
     @EventHandler
