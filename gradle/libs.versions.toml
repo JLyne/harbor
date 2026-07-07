@@ -1,7 +1,7 @@
 [versions]
 pluginYmlPaper = "0.9.0"
 paper = "26.2.build.+"
-placeholderApi = "2.12.2"
+placeholderApi = "2.12.3"
 paperweightUserdev = "2.0.0-beta.21"
 
 [libraries]
