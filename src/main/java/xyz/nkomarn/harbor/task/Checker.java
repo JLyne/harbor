@@ -113,7 +113,9 @@ public class Checker extends BukkitRunnable {
      * @return Whether a world is excluded from Harbor checks.
      */
     private boolean isBlacklisted(@NotNull World world) {
-        boolean blacklisted = harbor.getConfiguration().getStringList("blacklist").contains(world.getName());
+        boolean blacklisted = harbor.getConfiguration().getStringList("blacklist")
+                .stream().map(NamespacedKey::fromString)
+                .anyMatch(key -> world.getKey().equals(key));
 
         if (harbor.getConfiguration().getBoolean("whitelist-mode")) {
             return !blacklisted;
